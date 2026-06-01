@@ -22,9 +22,13 @@ public class AiConfiguration {
             AiProviderProperties properties,
             OpenAiSpringAiClient openAiSpringAiClient
     ) {
-        return switch (properties.provider().toLowerCase()) {
+        String provider = properties.provider() == null || properties.provider().isBlank()
+                ? "openai"
+                : properties.provider();
+
+        return switch (provider.toLowerCase()) {
             case "openai" -> openAiSpringAiClient;
-            default -> throw new IllegalArgumentException("Unsupported AI provider: " + properties.provider());
+            default -> throw new IllegalArgumentException("Unsupported AI provider: " + provider);
         };
     }
 }
